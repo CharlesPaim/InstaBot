@@ -1,4 +1,49 @@
-﻿function abreprimeirafoto(url) {
+﻿function possuiValorArray(objArray, objValor){
+	if (objArray.indexOf(objValor)> -1) {
+		return true;
+	} else {
+		objArray.push(objValor);
+	}
+	return false;
+}
+
+function fotoPossuiLike(){
+
+	var macro =  "CODE:";
+	macro +=  "SET !TIMEOUT_TAG 0" + "\n";
+	macro +=  'TAG POS=1 TYPE=SPAN ATTR=TXT:Like EXTRACT=TXT' + "\n"; 
+	
+	var ret = iimPlay(macro);
+	if (ret< 1) {
+		 macro =  "CODE:";
+		macro +=  "SET !TIMEOUT_TAG 0" + "\n";
+		macro +=  'TAG POS=1 TYPE=SPAN ATTR=TXT:Curtir EXTRACT=TXT' + "\n"; 
+		var ret = iimPlay(macro);
+		
+		if (ret< 1) {
+			 macro =  "CODE:";
+			macro +=  "SET !TIMEOUT_TAG 0" + "\n";
+			macro +=  'TAG POS=1 TYPE=SPAN ATTR=TXT:Gosto EXTRACT=TXT' + "\n"; 
+			var ret = iimPlay(macro);
+			if (ret< 1) {
+				return false;
+			}
+		}	
+	}
+	return true;	
+}
+
+function getperfil() {	
+
+		var macro =  "CODE:";
+		macro +=  'TAG POS=1 TYPE=A ATTR=class:"*notranslate*" EXTRACT=HREF' + "\n"; 
+		var ret = iimPlay(macro);
+		if (ret < 0) return null;
+		var urlperfil = iimGetLastExtract(0);
+		return urlperfil.substring(urlperfil.lastIndexOf("com/")+4,urlperfil.length-1);	
+}
+
+function abreprimeirafoto(url) {
 	//abre a primeira foto		
 	var macro =  "CODE:";
 	macro +=  "URL GOTO=" + url + "\n"; 
@@ -23,12 +68,14 @@
 		iimPlay(macro);
 	}	
 }
+var perfis=[];
 var abas= [
 "https://www.instagram.com/explore/tags/fotocasamento/", 
 "https://www.instagram.com/explore/tags/bolocasamento/",
 "https://www.instagram.com/explore/tags/cupcakespersonalizados/",
 "https://www.instagram.com/explore/tags/mesario/",
-"https://www.instagram.com/explore/tags/bolonopote/"
+"https://www.instagram.com/explore/tags/bolonopote/",
+"https://www.instagram.com/explore/tags/bolonopote/",
 "https://www.instagram.com/explore/tags/bemcasados/",
 "https://www.instagram.com/explore/tags/granulado/",
 "https://www.instagram.com/explore/tags/cerimonial/",
@@ -42,7 +89,7 @@ var abas= [
 "https://www.instagram.com/explore/tags/docesfinos/",
 "https://www.instagram.com/explore/tags/mesversario/",
 "https://www.instagram.com/explore/tags/madrinha/",
-"https://www.instagram.com/explore/tags/padrinhos/",*/
+"https://www.instagram.com/explore/tags/padrinhos/",
 "https://www.instagram.com/explore/tags/brigadeirogourmet/",
 "https://www.instagram.com/explore/tags/mamaeamamuito/",
 "https://www.instagram.com/explore/tags/chadebebe/",
@@ -51,7 +98,7 @@ var abas= [
 "https://www.instagram.com/explore/tags/despedidadesolteira/",
 "https://www.instagram.com/explore/tags/noivado/",
 "https://www.instagram.com/explore/tags/blogdecasamento/",
-"https://www.instagram.com/explore/tags/festafrozen/"/*,
+"https://www.instagram.com/explore/tags/festafrozen/",
 "https://www.instagram.com/explore/tags/1mes/",
 "https://www.instagram.com/explore/tags/2meses/",
 "https://www.instagram.com/explore/tags/3meses/",
@@ -82,11 +129,13 @@ var abas= [
 //Número de abas abertas no momento que o script será executado
 //var numtabs=prompt("Entre com a quantidade de abas abertas", "53");
 //Número de likes por aba
-var numlikes=prompt("Entre com a quantidade de likes", "50");;
+var numlikes=prompt("Entre com a quantidade de likes", "50");
 var segundos;
 var maximoSegundos = 15;
 var likes = 0;
+
 for (var y=0;y<abas.length;y++) {	
+	var curtidos = 0;
 
 	abreprimeirafoto(abas[y]);	
 	
@@ -101,42 +150,42 @@ for (var y=0;y<abas.length;y++) {
 	var seguinte = header + "TAG POS=1 TYPE=A ATTR=TXT:Seguinte" + "\n"; 
 	
 	for (var x=0;x<numlikes;x++) {		
+	
+		if (fotoPossuiLike() && !possuiValorArray(perfis, getperfil())) {
 		
-		//Curte a foto atual
-		var ret1 = iimPlay(like);	
-		if (ret1 < 0) {		
-			//alert('nao achou like');
-			ret1 = iimPlay(curtir);
+			//Curte a foto atual
+			var ret1 = iimPlay(like);	
 			if (ret1 < 0) {		
-				//alert('nao achou curtir');
-				ret1 = iimPlay(gosto);
-				if (ret1 == 1) {							
+				ret1 = iimPlay(curtir);
+				if (ret1 < 0) {	
+					ret1 = iimPlay(gosto);
+					if (ret1 == 1) {							
+						likes++;
+					}
+				} else {
 					likes++;
 				}
 			} else {
 				likes++;
 			}
 		} else {
-			likes++;
+			x--;
+			curtidos++;
+			if (curtidos == 5) {
+				x = numlikes;
+			}			
 		}
 		
 		var ret2 = iimPlay(next);
-		/*alert(next);
-		alert('retnext=' + ret2);*/
 		if (ret2 < 0) {		
 			ret2 = iimPlay(proximo);
-			/*alert(proximo);
-			alert('retproximo=' + ret2);*/
 			if (ret2 < 0) {		
 				ret2 = iimPlay(seguinte);
-				/*alert(seguinte);
-				alert('retseguinte=' + ret2);*/
 				if (ret2 < 0) {		
-					//alert('não achou seguinte');
 					abreprimeirafoto(abas[y]);	
 				}
-			}
-		}		
+			} 
+		}
 		segundos = Math.floor(Math.random() * maximoSegundos ) + 1;	
 		var macroSegundos = "CODE:";
 		macroSegundos +=  "WAIT SECONDS=" + segundos + "\n"; 
