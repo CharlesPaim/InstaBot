@@ -126,8 +126,6 @@ var abas= [
 "https://www.instagram.com/explore/locations/248213905/espaco-casa-de-stella/"
 ]; 
 
-//Número de abas abertas no momento que o script será executado
-//var numtabs=prompt("Entre com a quantidade de abas abertas", "53");
 //Número de likes por aba
 var numlikes=prompt("Entre com a quantidade de likes", "50");
 var segundos;
