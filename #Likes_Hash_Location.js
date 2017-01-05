@@ -226,14 +226,14 @@ function curtePosts(abas) {
 			}	
 			
 			//Para a próximo foto, caso o limite de curtidas por url não tenha sido atingido
-			if (likesAba < numlikes) {
+			if (curtidos < limiteFotosCurtidasSeguidas || likesAba < numlikes) {
 				cont = 0;
 				var retnext = -1;
 				while (cont < labelNext.length & retnext < 0 ) {
 					var next =  header + "TAG POS=1 TYPE=A ATTR=TXT:" + labelNext[cont] + "\n";
 					retnext = iimPlay(next);		
 					cont++;
-			}
+				}
 				
 				//Recarrega a página caso ocorra erro de página não encontrada
 				if (retnext < 0) {		
