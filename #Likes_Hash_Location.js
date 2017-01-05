@@ -16,12 +16,13 @@ function possuiValorArray(objArray, objValor){
 var header = "CODE:\nSET !TIMEOUT_TAG 0\n";
 var labelLike = ["Like","Curtir","Gosto"];
 var labelNext = ["Next","Próximo","Seguinte"];
+
 function fotoPossuiLike(){
 	
 	//returna true se a foto ainda não foi curtida
 	var cont = 0;
 	var retlike = -1;
-	while (cont <= labelLike.length & retlike == -1 ) {
+		while (cont < labelLike.length & retlike < 0) {
 		var like =  header + "TAG POS=1 TYPE=SPAN ATTR=TXT:" + labelLike[cont] + " EXTRACT=TXT" + "\n";
 		retlike = iimPlay(like);
 		if (retlike == 1) {		
@@ -145,7 +146,7 @@ for (var y=0;y<abas.length;y++) {
 		if (fotoPossuiLike() && !possuiValorArray(perfis, getperfil())) {
 			var cont = 0;
 			var retlike = -1;
-			while (cont <= labelLike.length & retlike == -1 ) {
+			while (cont < labelLike.length & retlike < 0 ) {
 			   	var like =  header + "TAG POS=1 TYPE=SPAN ATTR=TXT:" + labelLike[cont] + "\n";
 				retlike = iimPlay(like);
 				if (retlike == 1) {		
@@ -162,7 +163,7 @@ for (var y=0;y<abas.length;y++) {
 		if (likesAba < numlikes) {
 			cont = 0;
 			var retnext = -1;
-			while (cont <= labelNext.length & retnext < 0 ) {
+			while (cont < labelNext.length & retnext < 0 ) {
 				var next =  header + "TAG POS=1 TYPE=A ATTR=TXT:" + labelNext[cont] + "\n";
 				retnext = iimPlay(next);		
 				cont++;
