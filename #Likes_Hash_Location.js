@@ -45,34 +45,36 @@ function getperfil() {
 		return urlperfil.substring(urlperfil.lastIndexOf("com/")+4,urlperfil.length-1);	
 }
 
-function abreprimeirafoto(url) {
+function abreprimeirafoto(url, pulaPosts) {
 	//abre a primeira foto		
 	var pos = [];
 	var macro =  "CODE:";
 	macro +=  "URL GOTO=" + url + "\n"; 
-	if (url.indexOf("/tags/") > -1 ) {
-		pos = ["316","453"];
-	} else {
+	if (url.indexOf("/locations/") > -1 ) {
 		pos = ["601","601"];
+	} else {
+		pos = ["316","453"];
 	}
 	macro +=  "CLICK X=" + pos[0] + " Y=" + pos[1] + "\n"; 	
 	
 	iimPlay(macro);	
 	
-	//Pula os 9 top posts
-	for (var i=0;i<10;i++) {	
-		var macro =  "CODE:";
-		macro +=  "SET !ERRORIGNORE YES" + "\n"; 
-		macro +=  "SET !TIMEOUT_TAG 0" + "\n";
-		macro +=  "TAG POS=1 TYPE=A ATTR=TXT:Next" + "\n"; 
-		macro +=  "TAG POS=1 TYPE=A ATTR=TXT:Próximo" + "\n"; 
-		macro +=  "TAG POS=1 TYPE=A ATTR=TXT:Seguinte" + "\n"; 
-		macro +=  "WAIT SECONDS=" + sorteia(3) + "\n"; 
-		iimPlay(macro);
-	}	
+	if (pulaPosts == true) {
+		//Pula os 9 top posts
+		for (var i=0;i<10;i++) {	
+			var macro =  "CODE:";
+			macro +=  "SET !ERRORIGNORE YES" + "\n"; 
+			macro +=  "SET !TIMEOUT_TAG 0" + "\n";
+			macro +=  "TAG POS=1 TYPE=A ATTR=TXT:Next" + "\n"; 
+			macro +=  "TAG POS=1 TYPE=A ATTR=TXT:Próximo" + "\n"; 
+			macro +=  "TAG POS=1 TYPE=A ATTR=TXT:Seguinte" + "\n"; 
+			macro +=  "WAIT SECONDS=" + sorteia(3) + "\n"; 
+			iimPlay(macro);
+		}	
+	}
 }
-var perfis=[];
-var abas= [
+var perfis = [];
+var abas = [
 "https://www.instagram.com/explore/tags/fotocasamento/", 
 "https://www.instagram.com/explore/tags/bolocasamento/",
 "https://www.instagram.com/explore/tags/cupcakespersonalizados/",
@@ -129,55 +131,152 @@ var abas= [
 "https://www.instagram.com/explore/locations/248213905/espaco-casa-de-stella/"
 ]; 
 
+var parceiros = [
+"https://www.instagram.com/modamascstyle/?hl=pt-br", 
+"https://www.instagram.com/maribferrer/?hl=pt-br", 
+"https://www.instagram.com/johndrops/", 
+"https://www.instagram.com/rafaelaravena/", 
+"https://www.instagram.com/befelippi/", 
+"https://www.instagram.com/pessoalindaoficial/", 
+"https://www.instagram.com/senhorashoes/?hl=pt", 
+"https://www.instagram.com/blogmarifonseca/?hl=pt", 
+"https://www.instagram.com/kadudantas/?hl=pt-br", 
+"https://www.instagram.com/marquesnara/?hl=pt", 
+"https://www.instagram.com/decoramundo/?hl=pt-br", 
+"https://www.instagram.com/damarissousaoficial/", 
+"https://www.instagram.com/paulinhasampaio/?hl=pt-br", 
+"https://www.instagram.com/gabifpinho/?hl=pt-br", 
+"https://www.instagram.com/deliciasdadaninha/", 
+"https://www.instagram.com/chicadocuras/", 
+"https://www.instagram.com/dondocaatrevida/", 
+"https://www.instagram.com/criartbrigadeiros/", 
+"https://www.instagram.com/yanethbrigadeiros/", 
+"https://www.instagram.com/festafetiva/", 
+"https://www.instagram.com/bandasupra/", 
+"https://www.instagram.com/edsonbeline/", 
+"https://www.instagram.com/pompsbaby/", 
+"https://www.instagram.com/buffetpaulista/", 
+"https://www.instagram.com/setdigital/", 
+"https://www.instagram.com/emiliasherlock/", 
+"https://www.instagram.com/maaa_gomes/?hl=pt", 
+"https://www.instagram.com/jornalistaabordo/?hl=pt-br", 
+"https://www.instagram.com/renanpsi/?hl=pt", 
+"https://www.instagram.com/camargotalles/?hl=pt", 
+"https://www.instagram.com/brigaderiadatici/", 
+"https://www.instagram.com/formiguinhanotabuleiro/", 
+"https://www.instagram.com/comcarinhodoceria/", 
+"https://www.instagram.com/fatimabemcasados/", 
+"https://www.instagram.com/chrismellassessoria/", 
+"https://www.instagram.com/villaparisfesta/", 
+"https://www.instagram.com/organiza_assessoria/", 
+"https://www.instagram.com/terapiadasdivas/", 
+"https://www.instagram.com/docinhos_gourmet/", 
+"https://www.instagram.com/gabluartes/", 
+"https://www.instagram.com/espacomagdabrandao/", 
+"https://www.instagram.com/loveshake.me/", 
+"https://www.instagram.com/wagnerbahiafotografia/", 
+"https://www.instagram.com/brigadende/", 
+"https://www.instagram.com/utilidarte/", 
+"https://www.instagram.com/gueubrigadeiros/", 
+"https://www.instagram.com/chegouodia/", 
+"https://www.instagram.com/encaracoladaacessorios/", 
+"https://www.instagram.com/tatianesilveiraassessoria/", 
+"https://www.instagram.com/kakabrigadeirosgourmet/", 
+"https://www.instagram.com/donana.doces/", 
+"https://www.instagram.com/_brigadelis/", 
+"https://www.instagram.com/brigaderiadama/", 
+"https://www.instagram.com/sonharecasar/", 
+"https://www.instagram.com/valentimbrigadeirogourmet/", 
+"https://www.instagram.com/bolosbeth/", 
+"https://www.instagram.com/modonoiva/", 
+"https://www.instagram.com/susse_brigaderia/", 
+"https://www.instagram.com/michelinisoarescerimonial/", 
+"https://www.instagram.com/tiochicobier/", 
+"https://www.instagram.com/anniesemijoias/",
+"https://www.instagram.com/myclosetoficial/",
+"https://www.instagram.com/projetomassamagra1/?hl=pt",
+"https://www.instagram.com/manualdamamae/"
+]; 
+
+function curtePosts(abas) {
+	for (var y=0;y<abas.length;y++) {	
+
+		abreprimeirafoto(abas[y],pulaPosts);	
+		
+		var curtidos = 0;
+		var likesAba = 0;
+		while (likesAba < numlikes & curtidos < limiteFotosCurtidasSeguidas ) {
+			//Se nenhuma foto do perfil atual foi curtida, curte a foto atual
+			if (fotoPossuiLike() ) {
+				if (likesUnicos == false |  !possuiValorArray(perfis, getperfil())) {
+					var cont = 0;
+					var retlike = -1;
+					while (cont < labelLike.length & retlike < 0 ) {
+						var like =  header + "TAG POS=1 TYPE=SPAN ATTR=TXT:" + labelLike[cont] + "\n";
+						retlike = iimPlay(like);
+						if (retlike == 1) {		
+							likesAba++;				
+							likes++;
+						}
+						cont++;
+					}
+				}
+			} else {
+				curtidos++;
+			}	
+			
+			//Para a próximo foto, caso o limite de curtidas por url não tenha sido atingido
+			if (likesAba < numlikes) {
+				cont = 0;
+				var retnext = -1;
+				while (cont < labelNext.length & retnext < 0 ) {
+					var next =  header + "TAG POS=1 TYPE=A ATTR=TXT:" + labelNext[cont] + "\n";
+					retnext = iimPlay(next);		
+					cont++;
+			}
+				
+				//Recarrega a página caso ocorra erro de página não encontrada
+				if (retnext < 0) {		
+					abreprimeirafoto(abas[y],pulaPosts);	
+				}
+			}
+
+			var macroSegundos = "CODE:";
+			macroSegundos +=  "WAIT SECONDS=" + sorteia(maximoSegundos)+ "\n"; 
+			iimPlay(macroSegundos);
+		}
+	}
+}
+
+var pulaPosts = true;
+var likesUnicos = true;
+var defaulNumLikes = 50;
+var defaultCurtidasSeguidas = 5;
+var opcao = prompt("Escolha (1) para Alvos ou (2) para Parceiros","1");
+switch(opcao) {
+    case "1":        
+        break;
+    case "2":
+        pulaPosts = false;
+		likesUnicos = false;
+		defaulNumLikes = 5;
+		defaultCurtidasSeguidas = 3;
+        break;
+    default:
+        break;
+}
+
 //Número de likes por aba
-var numlikes=prompt("Entre com a quantidade de likes", "50");
+var numlikes = prompt("Entre com a quantidade de likes", defaulNumLikes);
+var limiteFotosCurtidasSeguidas = prompt("Entre com o limite de fotos curtidas seguidas", defaultCurtidasSeguidas);
+
 var maximoSegundos = 15;
 var likes = 0;
 
-for (var y=0;y<abas.length;y++) {	
-
-	abreprimeirafoto(abas[y]);	
-	
-	var curtidos = 0;
-	var likesAba = 0;
-	while (likesAba < numlikes & curtidos < 5 ) {
-		
-		//Se nenhuma foto do perfil atual foi curtida, curte a foto atual
-		if (fotoPossuiLike() && !possuiValorArray(perfis, getperfil())) {
-			var cont = 0;
-			var retlike = -1;
-			while (cont < labelLike.length & retlike < 0 ) {
-			   	var like =  header + "TAG POS=1 TYPE=SPAN ATTR=TXT:" + labelLike[cont] + "\n";
-				retlike = iimPlay(like);
-				if (retlike == 1) {		
-					likesAba++;				
-					likes++;
-				}
-				cont++;
-			}
-		} else {
-			curtidos++;
-		}	
-		
-		//Para a próximo foto, caso o limite de curtidas por url não tenha sido atingido
-		if (likesAba < numlikes) {
-			cont = 0;
-			var retnext = -1;
-			while (cont < labelNext.length & retnext < 0 ) {
-				var next =  header + "TAG POS=1 TYPE=A ATTR=TXT:" + labelNext[cont] + "\n";
-				retnext = iimPlay(next);		
-				cont++;
-		}
-			
-			//Recarrega a página caso ocorra erro de página não encontrada
-			if (retnext < 0) {		
-				abreprimeirafoto(abas[y]);	
-			}
-		}
-
-		var macroSegundos = "CODE:";
-		macroSegundos +=  "WAIT SECONDS=" + sorteia(maximoSegundos)+ "\n"; 
-		iimPlay(macroSegundos);
-	}
+if (opcao == "2") {
+	curtePosts(parceiros);
+} else {
+	curtePosts(abas);
 }
+
 alert("Total de urls: " + abas.length + "\nTotal de Likes: " + likes);
