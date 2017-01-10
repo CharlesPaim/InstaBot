@@ -34,6 +34,16 @@ function fotoPossuiLike(){
 	return false;
 }
 
+function getUrlAtual(){
+	var macro =  "CODE:";
+	macro +=  'ADD !EXTRACT {{!URLCURRENT}}' + "\n"; 
+	var ret = iimPlay(macro);
+	if (ret < 0) return null;
+	return iimGetLastExtract(0);
+}
+
+
+
 function getperfil() {	
 
 		//retorna o nome do perfil da foto atualmente aberta
@@ -75,42 +85,42 @@ function abreprimeirafoto(url, pulaPosts) {
 }
 var perfis = [];
 var abas = [
-"https://www.instagram.com/explore/tags/fotocasamento/", 
+"https://www.instagram.com/explore/tags/fotocasamento/", //[0]
 "https://www.instagram.com/explore/tags/bolocasamento/",
 "https://www.instagram.com/explore/tags/cupcakespersonalizados/",
 "https://www.instagram.com/explore/tags/mesario/",
-"https://www.instagram.com/explore/tags/bolonopote/",
+"https://www.instagram.com/explore/tags/bolonopote/",//[4]
 "https://www.instagram.com/explore/tags/bolonopote/",
 "https://www.instagram.com/explore/tags/bemcasados/",
 "https://www.instagram.com/explore/tags/granulado/",
 "https://www.instagram.com/explore/tags/cerimonial/",
 "https://www.instagram.com/explore/tags/casamento2017/",
 "https://www.instagram.com/explore/tags/noivas2017/",
-"https://www.instagram.com/explore/tags/15anos/",
+"https://www.instagram.com/explore/tags/15anos/",//[11]
 "https://www.instagram.com/explore/tags/maedemenina/",
 "https://www.instagram.com/explore/tags/brigadeirobelga/",
 "https://www.instagram.com/explore/tags/brigadeiro/",
 "https://www.instagram.com/explore/tags/confeitaria/",
 "https://www.instagram.com/explore/tags/docesfinos/",
-"https://www.instagram.com/explore/tags/mesversario/",
+"https://www.instagram.com/explore/tags/mesversario/",//[17]
 "https://www.instagram.com/explore/tags/madrinha/",
 "https://www.instagram.com/explore/tags/padrinhos/",
 "https://www.instagram.com/explore/tags/brigadeirogourmet/",
 "https://www.instagram.com/explore/tags/mamaeamamuito/",
-"https://www.instagram.com/explore/tags/chadebebe/",
+"https://www.instagram.com/explore/tags/chadebebe/",//[22]
 "https://www.instagram.com/explore/tags/chadefraldas/",
 "https://www.instagram.com/explore/tags/chadecozinha/",
 "https://www.instagram.com/explore/tags/despedidadesolteira/",
 "https://www.instagram.com/explore/tags/noivado/",
 "https://www.instagram.com/explore/tags/blogdecasamento/",
-"https://www.instagram.com/explore/tags/festafrozen/",
+"https://www.instagram.com/explore/tags/festafrozen/",//[28]
 "https://www.instagram.com/explore/tags/1mes/",
 "https://www.instagram.com/explore/tags/2meses/",
 "https://www.instagram.com/explore/tags/3meses/",
 "https://www.instagram.com/explore/tags/4meses/",
 "https://www.instagram.com/explore/tags/5meses/",
 "https://www.instagram.com/explore/tags/6meses/",
-"https://www.instagram.com/explore/tags/7meses/",
+"https://www.instagram.com/explore/tags/7meses/",//[36]
 "https://www.instagram.com/explore/tags/8meses/",
 "https://www.instagram.com/explore/tags/9meses/",
 "https://www.instagram.com/explore/tags/1ano/",
@@ -198,8 +208,14 @@ var parceiros = [
 "https://www.instagram.com/manualdamamae/"
 ]; 
 
+function aguardaTempo(segundos) {
+		var macroSegundos = "CODE:";
+		macroSegundos +=  "WAIT SECONDS=" + sorteia(segundos)+ "\n"; 
+		iimPlay(macroSegundos);
+}
+
 function curtePosts(abas) {
-	for (var y=0;y<abas.length;y++) {	
+	for (var y=abaInicial;y<abas.length;y++) {	
 
 		abreprimeirafoto(abas[y],pulaPosts);	
 		
@@ -224,9 +240,12 @@ function curtePosts(abas) {
 			} else {
 				curtidos++;
 			}	
+
+			aguardaTempo(5);
 			
 			//Para a próximo foto, caso o limite de curtidas por url não tenha sido atingido
 			if (curtidos < limiteFotosCurtidasSeguidas || likesAba < numlikes) {
+				var urlAtual = getUrlAtual();
 				cont = 0;
 				var retnext = -1;
 				while (cont < labelNext.length & retnext < 0 ) {
@@ -235,15 +254,21 @@ function curtePosts(abas) {
 					cont++;
 				}
 				
-				//Recarrega a página caso ocorra erro de página não encontrada
-				if (retnext < 0) {		
+				/*Carrega a próxima página caso ocorra erro de página não encontrada
+				ou se imagem não muda ao clicar no ícone de "próximo" 
+				(bug que às vezes acontece no instagram)
+				*/
+
+				var proximaUrl = getUrlAtual();
+				if (retnext < 0 ) {		
+/*				y++;
+					curtidos = 0;
+					likesAba = 0;*/
 					abreprimeirafoto(abas[y],pulaPosts);	
 				}
 			}
 
-			var macroSegundos = "CODE:";
-			macroSegundos +=  "WAIT SECONDS=" + sorteia(maximoSegundos)+ "\n"; 
-			iimPlay(macroSegundos);
+			aguardaTempo(5);
 		}
 	}
 }
@@ -253,14 +278,16 @@ var likesUnicos = true;
 var defaulNumLikes = 50;
 var defaultCurtidasSeguidas = 5;
 var opcao = prompt("Escolha (1) para Alvos ou (2) para Parceiros","1");
+var maximo = abas.length;
 switch(opcao) {
     case "1":        
         break;
     case "2":
+    	maximo = parceiros.length
         pulaPosts = false;
-		likesUnicos = false;
-		defaulNumLikes = 5;
-		defaultCurtidasSeguidas = 3;
+	likesUnicos = false;
+	defaulNumLikes = 5;
+	defaultCurtidasSeguidas = 3;
         break;
     default:
         break;
@@ -269,8 +296,7 @@ switch(opcao) {
 //Número de likes por aba
 var numlikes = prompt("Entre com a quantidade de likes", defaulNumLikes);
 var limiteFotosCurtidasSeguidas = prompt("Entre com o limite de fotos curtidas seguidas", defaultCurtidasSeguidas);
-
-var maximoSegundos = 15;
+var abaInicial = prompt("Entre com o número da aba inicial (Mínimo: 0 / Máximo: " + maximo + ")","0");
 var likes = 0;
 
 if (opcao == "2") {
