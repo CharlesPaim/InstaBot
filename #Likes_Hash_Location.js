@@ -215,9 +215,9 @@ function aguardaTempo(segundos) {
 }
 
 function curtePosts(abas) {
-	for (var y=abaInicial;y<abas.length;y++) {	
+	for (var y=0;y<abas.length;y++) {	
 
-		abreprimeirafoto(abas[y],pulaPosts);	
+		abreprimeirafoto(pegaElementoAleatorioArray(abas),pulaPosts);	
 		
 		var curtidos = 0;
 		var likesAba = 0;
@@ -273,6 +273,16 @@ function curtePosts(abas) {
 	}
 }
 
+function pegaElementoAleatorioArray(abas) {
+	
+	//pega aleatoriamente um elemento do array e o exclui
+	var pos = Math.floor(Math.random() * abas.length);
+	var url = abas[pos];
+	abas.splice(pos,1);
+	return url;
+	
+}
+
 var pulaPosts = true;
 var likesUnicos = true;
 var defaulNumLikes = 50;
@@ -296,13 +306,14 @@ switch(opcao) {
 //Número de likes por aba
 var numlikes = prompt("Entre com a quantidade de likes", defaulNumLikes);
 var limiteFotosCurtidasSeguidas = prompt("Entre com o limite de fotos curtidas seguidas", defaultCurtidasSeguidas);
-var abaInicial = prompt("Entre com o número da aba inicial (Mínimo: 0 / Máximo: " + maximo + ")","0");
 var likes = 0;
-
+var totalUrls;
 if (opcao == "2") {
+	totalUrls = parceiros.length;
 	curtePosts(parceiros);
 } else {
+	totalUrls = abas.length;
 	curtePosts(abas);
 }
 
-alert("Total de urls: " + abas.length + "\nTotal de Likes: " + likes);
+alert("Total de urls: " + totalUrls + "\nTotal de Likes: " + likes);
