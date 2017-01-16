@@ -205,7 +205,8 @@ var parceiros = [
 "https://www.instagram.com/anniesemijoias/",
 "https://www.instagram.com/myclosetoficial/",
 "https://www.instagram.com/projetomassamagra1/?hl=pt",
-"https://www.instagram.com/manualdamamae/"
+"https://www.instagram.com/manualdamamae/",
+"https://www.instagram.com/revistacasamento/"
 ]; 
 
 function aguardaTempo(segundos) {
